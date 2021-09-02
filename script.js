@@ -1,7 +1,5 @@
 const pokemonContainer = document.querySelector('.pokemon-container');
-
 const myModal = document.querySelector('#modal-content');
-
 const myModalContent = `
 				     	<figure>
                				<img class="img1" alt="">
@@ -21,8 +19,15 @@ headers.append('Access-Control-Allow-Origin', 'http://127.0.0.1:5500/');
 headers.append('Access-Control-Allow-Credentials', 'true');
 
  */
+let showLoadingImage = (state) => {
+	let displayState = state ? 'flex' : 'none';
+	let loadingImage = document.getElementById('loadingImage');
+	loadingImage.style.display = displayState;
+};
 
-fetch('https://pokeapi.co/api/v2/pokemon?limit=386')
+showLoadingImage(true);
+
+fetch('https://pokeapi.co/api/v2/pokemon?limit=100')
 	.then((response) => response.json())
 	.then((parsed) => {
 		let allPromises = [];
@@ -52,9 +57,7 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit=386')
 
 			pokemonContainer.innerHTML += `
 			<article  class="item ${pokemonTypes.join(' ')} ${pokemonName}">
-				<img alt="${pokemonName}" class="pokemon-profile" src="https://pokeres.bastionbot.org/images/pokemon/${
-				index + 1
-			}.png" onclick="doSomethingOnClick('${pokemonName}')"></img>
+				<img alt="${pokemonName}" class="pokemon-profile" src="${json.sprites['front_default']}" onclick="doSomethingOnClick('${pokemonName}')"></img>
                 <hgroup>
 					<h4 class="poke-id"> 00${pokemonIndex}. ${pokemonName}</h4>
 					<h5 class="types"> ${pokemonTypes.join(' & ')}</h5>
@@ -63,6 +66,7 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit=386')
             </article>
 			`;
 		});
+		showLoadingImage(false);
 	});
 
 // console.log(pokemonContainer.classList.contains('fire'));
@@ -135,7 +139,7 @@ class Pokedex {
 		fetch(`${API}${pokemon}`)
 			.then((parsed) => parsed.json())
 			.then((parsed) => {
-				const link = `https://pokeres.bastionbot.org/images/pokemon/${parsed.id}.png`;
+				const link = `${parsed.sprites['front_default']}`;
 				//	the weight in the api is in hectogram units while the height is in decimeter units
 				// convert them into pounds and meter because they are common units
 				const weight = (parsed.weight / 4.536).toFixed(2);
@@ -189,7 +193,6 @@ class Pokedex {
 
 		img1.onload = function () {
 			showLoadingImage(false);
-
 			_modal.style.display = 'block';
 		};
 
@@ -221,3 +224,32 @@ let doSomethingOnClick = (pokemon) => {
 	pokedex.openTheModal(pokemon);
 };
 
+document.onkeydown = function (e) {
+	if (event.keyCode == 123) {
+		return false;
+	}
+	/*  Ctrl+Shift+I */
+	if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+		return false;
+	}
+	/* Ctrl+Shift+C */
+	if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+		return false;
+	}
+	/* Ctrl+Shift+J */
+	if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+		return false;
+	}
+	/* Ctrl+Shift+U */
+	if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+		return false;
+	}
+};
+window.addEventListener(
+	'contextmenu',
+	function (e) {
+		// do something here...
+		e.preventDefault();
+	},
+	false,
+);
