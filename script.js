@@ -27,7 +27,7 @@ let showLoadingImage = (state) => {
 
 showLoadingImage(true);
 
-fetch('https://pokeapi.co/api/v2/pokemon?limit=100')
+fetch('https://pokeapi.co/api/v2/pokemon?limit=20')
 	.then((response) => response.json())
 	.then((parsed) => {
 		let allPromises = [];
@@ -248,7 +248,6 @@ document.onkeydown = function (e) {
 window.addEventListener(
 	'contextmenu',
 	function (e) {
-		// do something here...
 		e.preventDefault();
 	},
 	false,
